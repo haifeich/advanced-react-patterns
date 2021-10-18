@@ -24,7 +24,8 @@ function CounterProvider({step = 1, initialCount = 0, ...props}) {
     {count: initialCount},
   )
 
-  return <CounterContext.Provider value={[state, dispatch]} {...props} />
+  const value = [state, dispatch]
+  return <CounterContext.Provider value={value} {...props} />
 }
 
 function useCounter() {
@@ -34,21 +35,22 @@ function useCounter() {
   }
   return context
 }
+const increment = dispatch => dispatch({type: 'increment'})
+const decrement = dispatch => dispatch({type: 'decrement'})
 
-// export {CounterProvider, useCounter}
+// export {CounterProvider, useCounter,increment,decrement}
 
 // src/screens/counter.js
-// import {useCounter} from 'context/counter'
+// import {useCounter,increment,decrement} from 'context/counter'
 
 function Counter() {
   const [state, dispatch] = useCounter()
-  const increment = () => dispatch({type: 'increment'})
-  const decrement = () => dispatch({type: 'decrement'})
+
   return (
     <div>
       <div>Current Count: {state.count}</div>
-      <button onClick={decrement}>-</button>
-      <button onClick={increment}>+</button>
+      <button onClick={() => decrement(dispatch)}>-</button>
+      <button onClick={() => increment(dispatch)}>+</button>
     </div>
   )
 }
